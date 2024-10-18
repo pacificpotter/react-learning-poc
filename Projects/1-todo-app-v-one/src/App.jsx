@@ -1,33 +1,37 @@
-import AppName from "./components/AppName";
 import AddTodo from "./components/AddTodo";
+import AppName from "./components/AppName";
+import TodoItems from "./components/TodoItems";
+import WelcomeMsg from "./components/WelcomeMsg";
 import List from "./components/List";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import TodoItems from "./components/TodoItems";
+import { useState } from "react";
 
 function App() {
-  const todoItems = [
-    {
-      name: "Buy Milk",
-      dueDate: "4/10/2024",
-    },
-    {
-      name: "Go to College",
-      dueDate: "4/10/2024",
-    },
-    {
-      name: "Like this",
-      dueDate: "4/10/2024",
-    },
-  ];
+  const [todoItems, setTodoItems] = useState([]);
+
+  const handleNewItem = (itemName, itemDueDate) => {
+    const newTodoItems = [
+      ...todoItems,
+      { name: itemName, dueDate: itemDueDate },
+    ];
+    setTodoItems(newTodoItems);
+  };
+
+  const handleDeleteItem = (todoItemName) => {
+    const newTodoItems = todoItems.filter((item) => item.name !== todoItemName);
+    setTodoItems(newTodoItems);
+  };
+
   return (
     <div>
-      {/* <center className="todo-container">
+      <center className="todo-container">
         <AppName />
-        <AddTodo />
-        <TodoItems todoItems={todoItems} />
-      </center> */}
-      <List />
+        <AddTodo onNewItem={handleNewItem} />
+        {todoItems.length === 0 && <WelcomeMsg />}
+        <TodoItems todoItems={todoItems} onDeleteClick={handleDeleteItem} />
+      </center>
+      {/* <List /> */}
     </div>
   );
 }
